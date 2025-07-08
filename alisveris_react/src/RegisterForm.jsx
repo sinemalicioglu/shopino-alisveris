@@ -1,14 +1,14 @@
 // src/RegisterForm.jsx
 import React from 'react';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
 function RegisterForm({ showRegisterForm, setShowRegisterForm, handleRegisterSubmit, registerErrorMessage }) {
-  if (!showRegisterForm) return null; // Eğer gösterilmeyecekse hiçbir şey render etme
+  if (!showRegisterForm) return null; 
 
   return (
     <div className="form-container" style={{ display: 'flex' }}>
       <div className="form-content">
-        <span className="form-kapat" onClick={() => { setShowRegisterForm(false); /* registerErrorMessage'i de temizle */ }}>&times;</span>
+        <span className="form-kapat" onClick={() => { setShowRegisterForm(false);}}>&times;</span>
         <h2>Kayıt Ol</h2>
         {registerErrorMessage && <div className="error-message" style={{ display: 'block' }}>{registerErrorMessage}</div>}
         <form onSubmit={handleRegisterSubmit}>

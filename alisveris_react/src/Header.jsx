@@ -1,7 +1,7 @@
 // src/Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
 function Header({
   currentUser,
@@ -18,7 +18,6 @@ function Header({
     <header>
       <div className="logo">
         <Link to="/" onClick={() => setActiveCategoryKey('anasayfa')}>
-          {/* Alışveriş arabası ikonu ve yazı yerine logo.png görseli geri geldi */}
           <img src="logo.png" alt="Shopino Logo" className="header-logo" />
         </Link>
       </div>

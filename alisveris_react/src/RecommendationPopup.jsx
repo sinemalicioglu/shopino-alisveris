@@ -1,6 +1,6 @@
 // src/RecommendationPopup.jsx
 import React from 'react';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
 function RecommendationPopup({
   showRecommendationPopup,
@@ -9,7 +9,7 @@ function RecommendationPopup({
   addToCart,
   handleAddRecommendedToCart
 }) {
-  if (!showRecommendationPopup) return null; // Eğer gösterilmeyecekse hiçbir şey render etme
+  if (!showRecommendationPopup) return null; 
 
   return (
     <div className="form-container" style={{ display: 'flex' }}>

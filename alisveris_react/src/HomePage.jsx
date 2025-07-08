@@ -1,10 +1,9 @@
 // src/HomePage.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
 function HomePage({ currentUser, setShowLoginForm, setShowRegisterForm }) {
-  // Prop'ların fonksiyon olup olmadığını kontrol edelim
   const handleLoginClick = typeof setShowLoginForm === 'function' ? setShowLoginForm : () => console.error("setShowLoginForm is not a function");
   const handleRegisterClick = typeof setShowRegisterForm === 'function' ? setShowRegisterForm : () => console.error("setShowRegisterForm is not a function");
 
@@ -20,8 +19,8 @@ function HomePage({ currentUser, setShowLoginForm, setShowRegisterForm }) {
         <h2 className="baslik-anasayfa">Alışverişe Başla</h2>
         {!currentUser && (
           <div className="hesap-islemleri-anasayfa">
-            <button onClick={handleLoginClick}>Giriş Yap</button> {/* Güncellendi */}
-            <button onClick={handleRegisterClick}>Kayıt Ol</button> {/* Güncellendi */}
+            <button onClick={handleLoginClick}>Giriş Yap</button> 
+            <button onClick={handleRegisterClick}>Kayıt Ol</button> 
           </div>
         )}
       </div>

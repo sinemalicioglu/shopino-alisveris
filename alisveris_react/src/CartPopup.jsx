@@ -1,6 +1,6 @@
 // src/CartPopup.jsx
 import React from 'react';
-import './style.css'; // Global stiller için
+import './style.css';
 
 function CartPopup({
   showCartPopup,
@@ -11,7 +11,7 @@ function CartPopup({
   calculateTotalCartPrice,
   handleCheckout
 }) {
-  if (!showCartPopup) return null; // Eğer gösterilmeyecekse hiçbir şey render etme
+  if (!showCartPopup) return null;
 
   return (
     <div className="form-container" style={{ display: 'flex' }}>

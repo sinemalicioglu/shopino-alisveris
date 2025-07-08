@@ -4,28 +4,24 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
-import pymysql # MySQL adapter'ı olarak kullanılır
-from datetime import datetime # Sipariş tarihi için eklendi
+import pymysql 
+from datetime import datetime 
 import pandas as pd
 from mlxtend.frequent_patterns import apriori, association_rules
 
 app = Flask(__name__)
-CORS(app) # CORS ayarı, frontend'den gelen istekler için gerekli
+CORS(app) 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:sinem@localhost:3306/shopino_db' 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+db = SQLAlchemy(app) 
 
-# MySQL Veritabanı Yapılandırması
-# Aşağıdaki bilgileri kendi MySQL sunucunuza ve oluşturduğunuz veritabanına göre DÜZENLEYİN:
-# 'mysql+pymysql://KULLANICI_ADINIZ:SIFRENIZ@HOST_ADRESINIZ:PORT_NUMARASI/VERITABANI_ADINIZ'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:sinem@localhost:3306/shopino_db' # <-- BURAYI KENDİ BİLGİLERİNİZLE DÜZENLEYİN!
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Gereksiz uyarıları kapatır
-db = SQLAlchemy(app) # db objesinin tanımı burada, tüm modellerden önce gelmelidir!
 
-# --- Veritabanı Modelleri ---
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.Text, nullable=False) # Boyut Text olarak değiştirildi
+    password_hash = db.Column(db.Text, nullable=False) 
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -43,7 +39,7 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     image_url = db.Column(db.String(200), nullable=True)
     subcategory = db.Column(db.String(80), nullable=True)
-    recommends_ids = db.Column(db.Text, nullable=True) # Text türü MySQL'de VARCHAR(L) veya TEXT'e eşleşir
+    recommends_ids = db.Column(db.Text, nullable=True) 
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     category = db.relationship('Category', backref=db.backref('products', lazy=True))
@@ -61,11 +57,11 @@ class Product(db.Model):
             'recommends': [int(x) for x in self.recommends_ids.split(',')] if self.recommends_ids else []
         }
 
-# Yeni Eklenecek Modeller: Order ve OrderItem
+
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    order_date = db.Column(db.DateTime, nullable=False, default=datetime.now) # datetime.now kullanıldı
+    order_date = db.Column(db.DateTime, nullable=False, default=datetime.now) 
     total_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False, default='beklemede')
 
@@ -96,13 +92,13 @@ class OrderItem(db.Model):
             'id': self.id,
             'orderId': self.order_id,
             'productId': self.product_id,
-            'productName': self.product.name, # Ürün ismini de ekledik
-            'imageUrl': self.product.image_url, # Ürün resmini de ekledik
+            'productName': self.product.name, 
+            'imageUrl': self.product.image_url, 
             'quantity': self.quantity,
             'priceAtPurchase': self.price_at_purchase
         }
 
-# --- API Rotaları (Endpoints) ---
+
 
 @app.route('/')
 def home():
@@ -123,8 +119,7 @@ def get_products():
         else:
             return jsonify({"message": "Category not found"}), 404
 
-    # Alt kategoriye göre filtreleme ekliyoruz
-    # subcategory_name 'Tümü' ise veya hiç gönderilmediyse filtreleme yapmıyoruz
+    
     if subcategory_name and subcategory_name != 'Tümü':
         products_query = products_query.filter_by(subcategory=subcategory_name)
 
@@ -138,7 +133,7 @@ def get_categories():
     categories_data = [{"id": cat.id, "name": cat.name} for cat in categories]
     return jsonify(categories_data)
 
-# --- Kullanıcı Yönetimi ---
+
 @app.route('/api/register', methods=['POST'])
 def register_user():
     data = request.get_json()
@@ -162,7 +157,7 @@ def register_user():
         return jsonify({"message": "Kayıt başarılı!", "user_id": new_user.id}), 201
     except Exception as e:
         db.session.rollback()
-        if '1062' in str(e): # MySQL hatası kodu duplicate entry
+        if '1062' in str(e): 
             return jsonify({"message": "Bu e-posta adresi zaten kayıtlı."}), 409
         return jsonify({"message": f"Kayıt olurken bir hata oluştu: {str(e)}"}), 400
 
@@ -185,23 +180,23 @@ def login_user():
         "last_name": user.last_name.capitalize()
     }), 200
 
-# Yeni API: Kullanıcı bilgilerini çekme
+
 @app.route('/api/user/<string:email>', methods=['GET'])
 def get_user_info(email):
     user = User.query.filter_by(email=email).first()
     if not user:
         return jsonify({"message": "Kullanıcı bulunamadı."}), 404
 
-    # Şifre hash'ini güvenlik nedeniyle göndermiyoruz!
+    
     return jsonify({
-        "id": user.id, # <-- BU SATIRI EKLEYİN!
+        "id": user.id,
         "first_name": user.first_name.capitalize(),
         "last_name": user.last_name.capitalize(),
         "email": user.email
     }), 200
 
 
-# Yeni API Rotaları: Sepet/Sipariş Yönetimi
+
 @app.route('/api/checkout', methods=['POST'])
 def checkout():
     data = request.get_json()
@@ -217,39 +212,37 @@ def checkout():
 
     total_amount = 0
     for item in cart_items_data:
-        # Frontend'den gelen totalPrice'ı kullanıyoruz
-        # Ancak frontend'den gelen fiyatın float olduğundan emin olalım
+        
         try:
             total_amount += float(item.get('totalPrice', 0))
         except ValueError:
             return jsonify({"message": "Geçersiz ürün fiyatı formatı."}), 400
 
 
-    # Yeni sipariş objesini oluştururken user_id, total_amount ve order_date'i doğru atayalım
+    
     new_order = Order(
-        user_id=user.id, # Kullanıcının id'si artık atanıyor
-        total_amount=total_amount, # Hesaplanan toplam tutar atanıyor
+        user_id=user.id,
+        total_amount=total_amount, 
         status='tamamlandı',
-        order_date=datetime.now() # datetime import'unu da kullandığınızdan emin olun
+        order_date=datetime.now() 
     )
 
     try:
         db.session.add(new_order)
-        db.session.flush() # new_order.id'ye erişmek için flush (Auto-increment ID'yi alır)
+        db.session.flush() 
 
         for item_data in cart_items_data:
-            # Ürün ID'sinin varlığını kontrol et
+            
             product_exists = Product.query.get(item_data['id'])
             if not product_exists:
-                # Eğer ürün bulunamazsa bir uyarı veya hata döndürebilirsiniz
-                # Şimdilik hata fırlatalım ve işlemi geri alalım
+                
                 raise ValueError(f"Product with ID {item_data['id']} not found.")
 
             order_item = OrderItem(
                 order_id=new_order.id,
                 product_id=item_data['id'],
                 quantity=item_data['quantity'],
-                price_at_purchase=item_data['price'] # Ürünün o anki birim fiyatı
+                price_at_purchase=item_data['price']
             )
             db.session.add(order_item)
 
@@ -273,13 +266,13 @@ def get_user_orders(user_id):
 
     orders = Order.query.filter_by(user_id=user_id).order_by(Order.order_date.desc()).all()
 
-    # Her bir siparişi ve içindeki kalemleri to_dict metoduyla döndür
+   
     orders_data = [order.to_dict() for order in orders]
 
     return jsonify(orders_data), 200
 
 
-# --- ML Öneri Sistemi Simülasyonu ---
+
 @app.route('/api/recommendations/<int:product_id>', methods=['GET'])
 def get_product_recommendations(product_id):
     bought_product = Product.query.get(product_id)
@@ -292,27 +285,21 @@ def get_product_recommendations(product_id):
 
     recommended_ids = [int(x) for x in recommended_ids_str.split(',') if x.strip()]
 
-    # Sepete eklenmiş olanları önermemek için ek kontrol (opsiyonel)
-    # Bu kısmı frontend'de de yönetebilirsiniz
-    # in_cart_product_ids = request.args.get('in_cart_product_ids')
-    # if in_cart_product_ids:
-    #     in_cart_product_ids_list = [int(x) for x in in_cart_product_ids.split(',')]
-    #     recommended_ids = [id for id in recommended_ids if id not in in_cart_product_ids_list]
 
     recommended_products = Product.query.filter(Product.id.in_(recommended_ids)).all()
 
     return jsonify([product.to_dict() for product in recommended_products]), 200
 
-# --- Veritabanı Oluşturma ve Başlangıç Verileri İçin Flask CLI Komutu ---
+
 @app.cli.command('create-db')
 def create_db_command():
     """Veritabanı tablolarını oluşturur ve başlangıç verilerini ekler."""
-    with app.app_context(): # Uygulama bağlamını oluştur
+    with app.app_context(): 
         try:
-            db.create_all() # MySQL'de tabloları oluştur
+            db.create_all() 
             print("Veritabanı tabloları oluşturuldu.")
 
-            # Kategori tablosunda veri olup olmadığını kontrol et
+            
             if Category.query.first() is None:
                 add_initial_data()
                 print("Başlangıç verileri eklendi.")
@@ -324,14 +311,7 @@ def create_db_command():
             print("Veritabanının (shopino_db gibi) MySQL Workbench'te oluşturulduğundan emin olun.")
 
 def add_initial_data():
-    # Mevcut veriyi temizle (opsiyonel, dikkatli kullanın)
-    # db.session.query(OrderItem).delete()
-    # db.session.query(Order).delete()
-    # db.session.query(Product).delete()
-    # db.session.query(Category).delete()
-    # db.session.query(User).delete()
-    # db.session.commit()
-
+    
     cat_atistirmalik = Category(id=1, name='Atıştırmalık')
     cat_icecek = Category(id=2, name='İçecek')
     cat_meyve_sebze = Category(id=3, name='Meyve & Sebze')
@@ -345,7 +325,6 @@ def add_initial_data():
         db.session.add_all([cat_atistirmalik, cat_icecek, cat_meyve_sebze, cat_sut_urunleri, cat_temel_gida, cat_et_urunleri, cat_kisisel_bakim, cat_ev_yasam])
         db.session.commit()
     else:
-        # Eğer kategoriler zaten varsa, mevcut objeleri çekiyoruz
         cat_atistirmalik = Category.query.get(1)
         cat_icecek = Category.query.get(2)
         cat_meyve_sebze = Category.query.get(3)
@@ -483,16 +462,16 @@ def add_initial_data():
     for product_data in products_list:
         existing_product = Product.query.get(product_data.id)
         if existing_product:
-            # Ürün zaten varsa güncelle
+        
             existing_product.name = product_data.name
             existing_product.price = product_data.price
             existing_product.image_url = product_data.image_url
             existing_product.subcategory = product_data.subcategory
             existing_product.recommends_ids = product_data.recommends_ids
             existing_product.category = product_data.category
-            db.session.add(existing_product) # Güncellenen objeyi session'a ekle
+            db.session.add(existing_product) 
         else:
-            # Ürün yoksa ekle
+           
             db.session.add(product_data)
     
     db.session.commit()
@@ -503,13 +482,13 @@ def generate_recommendations_command():
     with app.app_context():
         print("Ürün önerileri oluşturuluyor...")
         try:
-            # 1. Sipariş verilerini çekme
+           
             orders = Order.query.all()
             if not orders:
                 print("Veritabanında hiç sipariş bulunamadı. Öneri oluşturulamıyor.")
                 return
 
-            # Her sipariş için ürün ID'lerini içeren bir liste oluşturma
+           
             transactions = []
             for order in orders:
                 product_ids_in_order = [item.product_id for item in order.items]
@@ -520,10 +499,10 @@ def generate_recommendations_command():
                 print("Siparişlerde ürün bilgisi bulunamadı. Öneri oluşturulamıyor.")
                 return
 
-            # Tüm benzersiz ürün ID'lerini al
+            
             all_product_ids = sorted(list(set(pid for sublist in transactions for pid in sublist)))
 
-            # 2. One-Hot Encoding formatına dönüştürme (Apriori için gerekli)
+            
             oht = []
             for transaction in transactions:
                 row = [1 if product_id in transaction else 0 for product_id in all_product_ids]
@@ -531,17 +510,16 @@ def generate_recommendations_command():
 
             df = pd.DataFrame(oht, columns=[f'product_{pid}' for pid in all_product_ids])
 
-            # 3. Apriori algoritmasını çalıştırma
+           
             frequent_itemsets = apriori(df, min_support=0.01, use_colnames=True)
             if frequent_itemsets.empty:
                 print("Belirtilen destek seviyesinde sık öğe kümesi bulunamadı. min_support değerini düşürmeyi deneyin.")
                 return
 
-            # 4. Birliktelik kurallarını oluşturma
-            # min_confidence yerine metric="confidence" ve min_threshold=0.5 kullanıyoruz
-            rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5) # <-- BU SATIRI GÜNCELLEYİN!
+            
+            rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5) 
 
-            # 5. Ürünlerin recommends_ids alanını güncelleme
+           
             product_recommendations = {}
             for product_id in all_product_ids:
                 product_recommendations[product_id] = []
@@ -560,7 +538,7 @@ def generate_recommendations_command():
                             if consequent_product_id not in product_recommendations[antecedent_product_id]:
                                 product_recommendations[antecedent_product_id].append(consequent_product_id)
 
-            # Veritabanındaki Product modellerini güncelle
+           
             for product_id, rec_ids in product_recommendations.items():
                 product = Product.query.get(product_id)
                 if product:
@@ -576,6 +554,5 @@ def generate_recommendations_command():
             print("Veritabanında yeterli ve çeşitli sipariş verisi olduğundan emin olun.")
 
 
-# ... (Uygulamayı Çalıştırma kısmı) ...
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

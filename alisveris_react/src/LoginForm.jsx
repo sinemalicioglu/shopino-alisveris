@@ -1,14 +1,14 @@
 // src/LoginForm.jsx
 import React from 'react';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
 function LoginForm({ showLoginForm, setShowLoginForm, handleLoginSubmit, loginErrorMessage }) {
-  if (!showLoginForm) return null; // Eğer gösterilmeyecekse hiçbir şey render etme
+  if (!showLoginForm) return null;
 
   return (
     <div className="form-container" style={{ display: 'flex' }}>
       <div className="form-content">
-        <span className="form-kapat" onClick={() => { setShowLoginForm(false); /* loginErrorMessage'i de temizle */ }}>&times;</span>
+        <span className="form-kapat" onClick={() => { setShowLoginForm(false);}}>&times;</span>
         <h2>Giriş Yap</h2>
         {loginErrorMessage && <div className="error-message" style={{ display: 'block' }}>{loginErrorMessage}</div>}
         <form onSubmit={handleLoginSubmit}>

@@ -1,6 +1,6 @@
 // src/ProductCard.jsx
 import React from 'react';
-import './style.css'; // Global stiller için
+import './style.css';
 
 function ProductCard({ product, addToCart }) {
   return (

@@ -2,78 +2,78 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #90D1CA; /* YENİ ARKA PLAN RENGİ */
-    color: #343a40; /* Koyu metin rengi korundu */
+    background-color: #90D1CA; 
+    color: #343a40; 
     line-height: 1.6;
 }
 
 header {
-    background-color: #ffffff; /* Header arka planı beyaz korundu */
+    background-color: #ffffff; 
     padding: 15px 30px;
     display: flex;
-    justify-content: space-between; /* Ögeleri uçlara iter */
+    justify-content: space-between; 
     align-items: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .logo {
-    flex-shrink: 0; /* Logoyu küçültme */
+    flex-shrink: 0;
 }
 
 .logo a {
     text-decoration: none;
-    transition: opacity 0.2s ease; /* Metin logosu olmadığı için rengi kaldırdık, sadece opacity geçişi */
+    transition: opacity 0.2s ease; 
 }
 
 .logo a:hover {
-    opacity: 0.8; /* Hover'da hafif şeffaflık */
+    opacity: 0.8; 
 }
 
 .header-logo {
-    height: 40px; /* Logo görselinin yüksekliğini belirle */
-    width: auto; /* Genişliği otomatik ayarla */
-    display: block; /* Gereksiz boşlukları kaldırmak için */
+    height: 40px; 
+    width: auto; 
+    display: block; 
 }
 
 
 nav {
-    flex-grow: 1; /* Navigasyonun kalan alanı doldurmasını sağlar */
-    display: flex; /* İçindeki ul'yi ortalamak için */
-    justify-content: center; /* İçindeki ul'yi yatayda ortala */
-    align-items: center; /* İçindeki ul'yi dikeyde ortala */
+    flex-grow: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
 }
 
 nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex; /* Linkleri yan yana dizer */
-    flex-wrap: wrap; /* Gerekirse alt satıra geçsinler */
-    justify-content: center; /* Linkleri kendi içinde ortala */
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
 }
 
 nav ul li {
-    margin: 0 12px; /* Linkler arasında boş boşluk */
+    margin: 0 12px;
 }
 
 nav ul li a {
     text-decoration: none;
-    color: #343a40; /* Navigasyon linkleri koyu metin rengi korundu */
+    color: #343a40;
     font-weight: 500; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     transition: color 0.3s ease;
     padding: 5px 0;
     position: relative;
-    white-space: nowrap; /* Kategori isimlerinin tek satırda kalmasını sağlar */
+    white-space: nowrap;
 }
 
 nav ul li a:hover {
-    color: #096B68; /* NAVİGASYON LİNKİ HOVER RENGİ YENİLENDİ */
+    color: #096B68; 
 }
 
-/* Aktif kategori linki stil */
+
 nav ul li a.active-category {
-    color: #096B68; /* AKTİF KATEGORİ RENGİ YENİLENDİ */
+    color: #096B68; 
     font-weight: bold;
 }
 
@@ -88,7 +88,7 @@ nav ul li a::after {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: #096B68; /* VURGU ÇİZGİSİ RENGİ YENİLENDİ */
+    background-color: #096B68;
     transition: width 0.3s ease-out;
 }
 
@@ -96,34 +96,33 @@ nav ul li a:hover::after {
     width: 100%;
 }
 
-/* Header'daki account bölümü */
+
 #headerAccount {
     display: flex; 
     align-items: center;
     gap: 10px;
-    /* Sağdaki account bölümüne sabit bir minimum genişlik vererek nav'ın kaymasını engelle */
-    min-width: 120px; /* Yaklaşık kullanıcı adı ve sepet/çıkış butonları kadar bir alan */
-    justify-content: flex-end; /* İçeriğini sağa hizala */
+    min-width: 120px; 
+    justify-content: flex-end; 
 }
 
-/* Giriş yapmış durumdaki elemanlar containerı */
+
 #loggedInContent {
-    display: none; /* JS tarafından kontrol edilir */
+    display: none; 
     align-items: center;
     gap: 10px;
 }
 
 .user-info {
     font-weight: bold;
-    color: #096B68; /* KULLANICI BİLGİSİ RENGİ YENİLENDİ */
+    color: #096B68; 
     padding: 5px 0;
     white-space: nowrap;
 }
 
-/* Sepet butonu özel stil (sadece ikon olacağı için padding ve gap ayarları değişti) */
+
 .cart-button {
     position: relative; 
-    background-color: #096B68; /* YENİ SEPET BUTONU RENGİ */
+    background-color: #096B68;
     color: #fff;
     border: none;
     padding: 0; 
@@ -150,9 +149,9 @@ nav ul li a:hover::after {
     transform: translateY(-1px);
 }
 
-/* Sepet sayısı için stil */
+
 .cart-count {
-    background-color: #dc3545; /* Kırmızı, hata rengi korundu */
+    background-color: #dc3545;
     color: white;
     font-size: 0.75em; 
     font-weight: bold;
@@ -167,7 +166,7 @@ nav ul li a:hover::after {
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    line-height: 18px; /* Dairenin yüksekliğine eşitledik - DİKEY ORTALAMA İÇİN KRİTİK */
+    line-height: 18px; 
     
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     box-sizing: border-box; 
@@ -175,14 +174,14 @@ nav ul li a:hover::after {
     z-index: 1; 
 }
 
-/* Sayı arttığında hafif büyüme efekti */
+
 .cart-count:not([data-count="0"]) {
     transform: scale(1); 
 }
 
 
 .logout-button {
-    background-color: #096B68; /* YENİ ÇIKIŞ YAP BUTONU RENGİ */
+    background-color: #096B68; 
     color: #fff;
     border: none; 
     padding: 8px 12px;
@@ -203,7 +202,7 @@ nav ul li a:hover::after {
     transform: translateY(-1px);
 }
 
-/* --- ANA SAYFAYA ÖZEL GİRİŞ/KAYIT BUTONLARI --- */
+
 .anasayfa-account-buttons {
     margin-top: 30px;
     display: flex; 
@@ -229,7 +228,7 @@ nav ul li a:hover::after {
 }
 
 
-/* --- POP-UP FORMLAR --- */
+
 .form-container {
     display: none; 
     position: fixed;
@@ -268,7 +267,7 @@ nav ul li a:hover::after {
     font-size: 1.8em;
 }
 
-/* Hata mesajı stili */
+
 .error-message {
     color: #dc3545; 
     font-size: 0.9em;
@@ -288,7 +287,7 @@ nav ul li a:hover::after {
     font-weight: 500;
 }
 
-/* Tüm input[type="text"], input[type="email"], input[type="password"] için stil */
+
 .form-grup input[type="text"],
 .form-grup input[type="email"],
 .form-grup input[type="password"] {
@@ -344,7 +343,7 @@ nav ul li a:hover::after {
     color: #dc3545; 
 }
 
-/* --- SEPET POP-UP ÖZEL STİLLERİ --- */
+
 .sepet-urun-listesi {
     margin-top: 20px;
     max-height: 300px;
@@ -501,7 +500,7 @@ nav ul li a:hover::after {
     font-size: 1.1em;
 }
 
-/* --- ÖNERİ POP-UP ÖZEL STİLLERİ --- */
+
 .öneri-popup-alt-butonlar button {
     width: auto;
     padding: 10px 20px;
@@ -515,11 +514,11 @@ nav ul li a:hover::after {
     font-weight: 500;
 }
 
-/* 'Kapat' butonu için özel stil */
+
 #oneriyiKapatBtn {
-    padding: 10px 20px; /* Her iki buton için aynı padding */
-    font-size: 0.9em; /* Her iki buton için aynı font boyutu */
-    height: 40px; /* Butonların aynı yükseklikte olmasını sağlar */
+    padding: 10px 20px; 
+    font-size: 0.9em; 
+    height: 40px; 
     box-sizing: border-box;
     border: none;
     background-color: #6c757d;
@@ -529,11 +528,11 @@ nav ul li a:hover::after {
     background-color: #5a6268;
 }
 
-/* 'Önerilenleri Sepete Ekle' butonu için özel stil */
+
 #onerilenleriSepeteEkleBtn {
-    padding: 10px 20px; /* Her iki buton için aynı padding */
-    font-size: 0.9em; /* Her iki buton için aynı font boyutu */
-    height: 40px; /* Butonların aynı yükseklikte olmasını sağlar */
+    padding: 10px 20px; 
+    font-size: 0.9em; 
+    height: 40px; 
     box-sizing: border-box;
     border: none;
     background-color: #096B68;
@@ -544,7 +543,7 @@ nav ul li a:hover::after {
 }
 
 
-/* --- ANA İÇERİK DÜZENİ --- */
+
 main {
     padding: 20px;
     max-width: 1200px;
@@ -720,7 +719,7 @@ main {
     transform: translateY(-1px);
     }
 
-/* --- FOOTER --- */
+
 footer {
     text-align: center;
     padding: 20px;
@@ -730,7 +729,7 @@ footer {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Responsive Düzenlemeler */
+
 @media (max-width: 768px) {
     header {
         flex-direction: column;

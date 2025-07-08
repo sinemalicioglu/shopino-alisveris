@@ -4,11 +4,11 @@ import './style.css'; // Global stiller için
 
 function CustomAlertModal({ show, message, onClose }) {
   if (!show) {
-    return null; // Eğer modal gösterilmeyecekse hiçbir şey render etme
+    return null; 
   }
 
   return (
-    <div className="form-container" style={{ display: 'flex' }}> {/* Mevcut form-container stilini kullanıyoruz */}
+    <div className="form-container" style={{ display: 'flex' }}> 
       <div className="form-content" style={{ textAlign: 'center', padding: '30px', maxWidth: '400px' }}>
         <h2 style={{ color: '#096B68', marginBottom: '20px' }}>Bilgilendirme</h2>
         <p style={{ fontSize: '1.1em', color: '#343a40', marginBottom: '30px' }}>{message}</p>

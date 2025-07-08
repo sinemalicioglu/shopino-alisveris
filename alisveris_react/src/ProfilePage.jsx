@@ -1,8 +1,8 @@
 // src/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
-import './style.css'; // Global stiller için
+import './style.css';
 
-function ProfilePage({ userEmail, currentUser, fetchUserProfileAndOrders, showLoginForm }) { // showLoginForm prop'u alınıyor
+function ProfilePage({ userEmail, currentUser, fetchUserProfileAndOrders, showLoginForm }) { 
     const [profileData, setProfileData] = useState(null);
     const [ordersData, setOrdersData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -55,7 +55,6 @@ function ProfilePage({ userEmail, currentUser, fetchUserProfileAndOrders, showLo
                 <div className="form-content" style={{ textAlign: 'center' }}>
                     <h2>Hata</h2>
                     <p>{error}</p>
-                    {/* Giriş yap butonu burada da openLoginForm'u çağıracak */}
                     {!userEmail && <button className="anasayfa-account-buttons button" onClick={showLoginForm}>Giriş Yap</button>}
                 </div>
             </section>
@@ -68,7 +67,7 @@ function ProfilePage({ userEmail, currentUser, fetchUserProfileAndOrders, showLo
                 <div className="form-content" style={{ textAlign: 'center' }}>
                     <h2>Profil Bilgileri Bulunamadı</h2>
                     <p>Giriş yapmamış olabilirsiniz veya bir sorun oluştu.</p>
-                    <button className="anasayfa-account-buttons button" onClick={showLoginForm}>Giriş Yap</button> {/* Güncellendi */}
+                    <button className="anasayfa-account-buttons button" onClick={showLoginForm}>Giriş Yap</button> 
                 </div>
             </section>
         );

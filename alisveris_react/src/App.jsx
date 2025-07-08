@@ -1,10 +1,9 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
-// Link, useNavigate, Routes, Route, useParams import'larına useLocation eklendi
 import { Link, useNavigate, Routes, Route, useParams, useLocation } from 'react-router-dom';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
-// Ayrılmış bileşenleri import ediyoruz
+
 import Header from './Header';
 import ProfilePage from './ProfilePage';
 import CartPopup from './CartPopup';
@@ -13,11 +12,10 @@ import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import HomePage from './HomePage';
 import CustomAlertModal from './CustomAlertModal';
-import CategoryProductsPage from './CategoryProductsPage'; // Ayrı dosyadan import ediyoruz
+import CategoryProductsPage from './CategoryProductsPage'; 
 
 
 function App() {
-  // --- Durum Değişkenleri (State Variables) ---
   const [currentUser, setCurrentUser] = useState(sessionStorage.getItem('currentUser'));
   const [userEmail, setUserEmail] = useState(sessionStorage.getItem('userEmail'));
 
@@ -31,32 +29,32 @@ function App() {
     }
   });
 
-  // Pop-up'ların görünürlük durumları
+  
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showCartPopup, setShowCartPopup] = useState(false);
   const [showRecommendationPopup, setShowRecommendationPopup] = useState(false);
 
-  // Custom Alert Modal için state'ler
+  
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
-  // Profil bilgileri ve siparişler için state'ler
+  
   const [userProfile, setUserProfile] = useState(null);
   const [userOrders, setUserOrders] = useState([]);
 
-  // Kategori ve ürün listeleme durumu
+  
   const [activeCategoryKey, setActiveCategoryKey] = useState('anasayfa');
   const [recommendedProducts, setRecommendedProducts] = useState([]);
 
-  // Hata mesajları
+  
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [registerErrorMessage, setRegisterErrorMessage] = useState('');
 
   const navigate = useNavigate();
-  const location = useLocation(); // Mevcut URL konumunu almak için useLocation hook'u
+  const location = useLocation(); 
 
-  // Giriş/Kayıt formları açılmadan önceki yolu saklamak için yeni state
+  
   const [previousPath, setPreviousPath] = useState('/');
 
   const productsFrontendCategories = {
@@ -240,16 +238,14 @@ function App() {
     }
   };
 
-  // --- Event Handler'lar ---
-
-  // Yeni yardımcı fonksiyonlar: Giriş/Kayıt modalını açarken mevcut yolu kaydet
+  
   const openLoginForm = () => {
-    setPreviousPath(location.pathname); // Mevcut yolu kaydet
+    setPreviousPath(location.pathname); 
     setShowLoginForm(true);
   };
 
   const openRegisterForm = () => {
-    setPreviousPath(location.pathname); // Mevcut yolu kaydet
+    setPreviousPath(location.pathname); 
     setShowRegisterForm(true);
   };
 
@@ -274,7 +270,7 @@ function App() {
         sessionStorage.setItem('userEmail', data.user_email);
         setShowLoginForm(false);
         setLoginErrorMessage('');
-        navigate(previousPath); // Kaydedilen yola geri dön
+        navigate(previousPath); 
       } else {
         setLoginErrorMessage(data.message || 'Giriş başarısız oldu. Lütfen tekrar deneyin.');
       }
@@ -310,7 +306,7 @@ function App() {
         handleShowAlert('Kayıt başarılı! Giriş yapabilirsiniz.');
         setShowRegisterForm(false);
         setRegisterErrorMessage('');
-        navigate(previousPath); // Kaydedilen yola geri dön
+        navigate(previousPath); 
       } else {
         setRegisterErrorMessage(data.message || 'Kayıt başarısız oldu. Lütfen tekrar deneyin.');
       }
@@ -326,7 +322,7 @@ function App() {
     sessionStorage.removeItem('currentUser');
     sessionStorage.removeItem('userEmail');
     setActiveCategoryKey('anasayfa');
-    navigate('/'); // Çıkış sonrası anasayfaya dön
+    navigate('/'); 
   };
 
   const handleAddRecommendedToCart = async () => {
@@ -351,8 +347,8 @@ function App() {
         currentUser={currentUser}
         getCartItemCount={getCartItemCount}
         handleLogout={handleLogout}
-        setShowLoginForm={openLoginForm} // Yeni fonksiyonu gönderiyoruz
-        setShowRegisterForm={openRegisterForm} // Yeni fonksiyonu gönderiyoruz
+        setShowLoginForm={openLoginForm} 
+        setShowRegisterForm={openRegisterForm} 
         setShowCartPopup={setShowCartPopup}
         activeCategoryKey={activeCategoryKey}
         productsFrontendCategories={productsFrontendCategories}
@@ -402,8 +398,8 @@ function App() {
           <Route path="/" element={
             <HomePage
               currentUser={currentUser}
-              setShowLoginForm={openLoginForm} // Yeni fonksiyonu gönderiyoruz
-              setShowRegisterForm={openRegisterForm} // Yeni fonksiyonu gönderiyoruz
+              setShowLoginForm={openLoginForm} 
+              setShowRegisterForm={openRegisterForm} 
             />
           } />
 
@@ -420,7 +416,7 @@ function App() {
               userEmail={userEmail}
               currentUser={currentUser}
               fetchUserProfileAndOrders={fetchUserProfileAndOrders}
-              showLoginForm={openLoginForm} // Yeni fonksiyonu gönderiyoruz
+              showLoginForm={openLoginForm} 
             />
           } />
 

@@ -12,7 +12,7 @@ function CategoryProductsPage({ productsFrontendCategories, fetchProducts, addTo
   const [componentProducts, setComponentProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
 
-  // categoryKey (ana kategori) değiştiğinde alt kategoriyi 'Tümü' olarak sıfırla
+  
   useEffect(() => {
     setCurrentSubcategory('Tümü');
   }, [categoryKey]);

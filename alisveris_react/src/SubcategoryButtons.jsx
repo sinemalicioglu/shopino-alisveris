@@ -1,6 +1,6 @@
 // src/SubcategoryButtons.jsx
 import React from 'react';
-import './style.css'; // Global stiller için
+import './style.css'; 
 
 function SubcategoryButtons({ subcategories, currentSubcategory, onSubcategoryClick }) {
   return (
